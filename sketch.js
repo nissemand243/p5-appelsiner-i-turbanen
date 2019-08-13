@@ -1,41 +1,61 @@
 /*
-Først laver vi et nogle variable til at lave en bold - en kugle som vi vil have til at hoppe rundt mellem skærmens hjørner. Vi giver kuglen nogle egenskaber (variable): x og y koordinater samt to hastigheder.
+Først laver vi et nogle variable til at lave en appelsin
+ - en kugle som vi vil skyde afsted og fange i en turban
 */
 
+// Appelsinen
 var x = 0; 
-var y = 300;
+var y = 550;
 var rad = 20;
-var xspeed = 3;
-var yspeed = -4;
-var grav = 0.022;
+var xspeed = 4;
+var yspeed = -10;
+var newspeed;
+var grav = 0.1;
 var col = [200,100,0];
-var tid = 500;
 
+// Turbanen
+var turban;
+
+// Øvrige
+var tid = 150;
+var score = 0;
+
+/* 
+ * 
+ */
 function setup() {
-    createCanvas(600, 400);
+    createCanvas(750, 600);
+    newspeed = yspeed;
+    x = rad;
+    turban = new Kurv(670, 100, 70, 50, 10);
 }
 
 function draw() {
     background(0);
-    display();
     move();
-
-
+    checkScore();
+    display();
 }
 
 function display() {
-    //Her skal vi sørge for at kuglen bliver vist, hvis den skal vises
+    fill(255);
+    text("Score: "+score, width-80, 30);
+    
+    //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
     if(tid > 0) {
         tid -= 1;
     }
-    if (tid < 300) {
+    if (tid < 100) {
         fill(col);
         ellipse(x, y, rad*2, rad*2);
     }
+
+    // Her vises turbanen - foreløbig blot en firkant
+    turban.tegn();
 }
     
 function move() {
-    //Her skal vi sørge for at kuglen bevæger sig, hvis den er startet
+    //Her skal vi sørge for at appelsinen bevæger sig, hvis den er startet
     if (tid <= 0) {
         x += xspeed;
         y += yspeed;
@@ -45,54 +65,82 @@ function move() {
         shootNew();
     }
 }
+
+function checkScore() {
+    // Her checkes om turbanen har fanget appelsinen. Hvis ja, skydes en ny appelsin afsted
+    if (yspeed > 0) {
+        if (turban.grebet(x, y, rad)) {
+            score += 1;
+            shootNew(); 
+        }
+    }
+}
     
 function shootNew() {
-    //Her skal vi sørge for at kuglen starter forfra 
-    x = 0;
-    y = 300;
-    yspeed = -3;
-    tid = (int) (Math.random() * 1000);
+    //Her skal vi sørge for at en ny appelsin skydes afsted 
+    x = rad;
+    y = 550;
+    yspeed = newspeed;
+    xspeed = 6*Math.random();
+    tid = (int) (Math.random() * 400);
 }
 
-function mouseClicked(){
-
+function keyPressed() {
+    turban.move(key);
 }
 
+function mousePressed(){
+
+}
 
 /*
 OPGAVER
+ Opgave 1 - undersøg hvad variablerne  grav  og  tid  bruges til.
+            Skriv det i kommentarer, prøv at se hvad der sker, når
+            I laver dem om. 
 
-Start med funktionen display(). Hvad skal der til for at tegne en cirkel? Du skal bruge funktionen ellipse(x, y, h, w), men husk at du skal bruge programmets variable: x, y etc..
-https://p5js.org/reference/#/p5/ellipse
+ Opgave 2 - lav programmet om så det er tilfældigt hvor højt oppe 
+            på venstre kan appelsinerne starter. Overvej om man kan 
+            sikre, at appelsinen ikke ryger ud af skærmens top men 
+            stadig har en "pæn" bane
 
-Dernæst funktionen move() - hvad skal der til for at kuglen kan bevæge sig? Du skal tænke sadan, at funktionen draw() bliver kaldt hele tiden (60 gange hver sekund). Og hvad gør draw så 60 gange i sekundet? Jo, den kalder funtionerne display, move og bounce... Så hvis du i move() funktionen påvirker programmets x- og y-værdier (ved at lægge xspeed og yspeed til), så flytter den sig..
+ Opgave 3 - lav programmet om så man også kan bevæge turbanen mod
+            højre og venstre med A- og D-tasterne. Prøv jer frem med
+            forskellige løsninger for hvor hurtigt turbanen skal rykke
 
-Tag til sidst funktionen bounce() - hvad skal der til for at kuglen ikke kommer til at bevæge sig udenfor skærmens højde og bredde? 
+ Opgave 4 - ret programmet til, så det også angives hvor mange 
+            appelsiner man IKKE greb med turbanen
 
-Tip: if(x > width || x < 0){...}
+ Opgave 5 - Undersøg hvad scriptet  kurv.js  er og gør, samt hvad de 
+            funktioner, scriptet indeholder, skal bruges til. Skriv 
+            det som kommentarer oven over hver funktion. Forklar tillige,
+            hvad sammenhængen mellem dette script og turbanen i hoved-
+            programmet er, og forklar det med kommentarer i toppen af 
+            kurv.js
 
-- - - -
+ Opgave 6 - find et billede af en turban og sæt det ind i stedet 
+            for firkanten. Find eventuelt også en lyd, der kan afspilles, 
+            når appelsinen gribes. Se gerne i "p5 Reference" hvordan, 
+            hvis ikke I kan huske det:   https://p5js.org/reference/
+            Lav programmet om, så man kan flytte turbanen med musen
 
-lidt sværere opgaver
+ Opgave 7 - lav en Appelsin-klasse, lige som der er en Kurv-klasse. 
+            Flyt koden til appelsinen ud i et selvstændigt script.
+            Overvej hvad det skal hedde, oghvilke variabler og funktioner, 
+            der skal lægges over i det nye script, herunder hvordan det 
+            kommer til at berøre turbanen. Skriv jeres overvejelser i 
+            kommentarerne
 
-Prøv at lave en ny funktion: changeColor(){} som skal sætte cirklens farve. Se først om du kan få funktionen til at sætte cirklens farve med programmets variabel col. Husk at du skal kalde din nye funktion fra draw() ligesom display, move og bounce.
+ Opgave 8 - ret programmet til, så der kan være flere appelsiner i 
+            luften på en gang, dvs. at der kan skydes en ny appelsin
+            afsted før den foregående er forsvundet. Overvej hvordan 
+            og hvor hurtigt de skal skydes af, og forklar jeres tanker
+            i kommentarerne
 
-Kan du skrive funktionen så den skifter mellem to forskellige farver hver gang cirklen rammer væggen?
-Husk at lave en ny variabel "col2" først..
-tip: if(xspeed > 0){...}else{...}
-
-- - - - 
-
-Lidt sværere opgaver
-
-Funktionen fill(r, g, b) har en fjerde parameter - a - som sætter fyldfarvens transparens. Hvis du for eksempel skriver fill(255, 0, 0, 127), farver du noget helt rødt, med en transparens på 50%. 
-
-Funktionen map() gør det muligt at flytte en variabels værdi fra én skala til en anden. Går variablen x for eksempel fra 0-600, kan du bruge map() til at omregne dens værdi til en skala fra 0-255. Se: https://p5js.org/reference/#/p5/map
-
-Kan du få cirklen til gradvist at face ud når den nærmer sig højre side af skærmen - og blive tydeligere når den nærmer sig venstre?
-
-Funktionen mouseClicked() bliver kaldt hvis man trykker med musen på programmet. Kan du sørge for at cirklen skifter retning på x-aksen, når der klikkes?
-
-
+ Opgave 9 - ret programmet til, så det kan vindes og/eller tabes ved
+            at man griber eller misser et antal appelsiner. Sørg for 
+            at der vises en "Game Over"-skærm, som fortæller om man 
+            vandt eller tabte, og som giver mulighed for at starte et
+            nyt spil.
 
 */
