@@ -3,6 +3,9 @@ Først laver vi et nogle variable til at lave en appelsin
  - en kugle som vi vil skyde afsted og fange i en turban
 */
 
+
+//fortsæt med at overføre koden til appelsinen til sit eget .js dokument.
+
 // Appelsinen
 var x = 0; 
 var y = 550;
@@ -19,15 +22,19 @@ var turban;
 // Øvrige
 var tid = 150;
 var score = 0;
+var miss = 0;
 
 /* 
  * 
  */
+
 function setup() {
     createCanvas(750, 600);
     newspeed = yspeed;
     x = rad;
-    turban = new Kurv(670, 100, 70, 50, 10);
+    turban = new Kurv(670, 120, 70, 50, 10);
+    appelsin = new appelsin(x, y);
+    
 }
 
 function draw() {
@@ -35,19 +42,25 @@ function draw() {
     move();
     checkScore();
     display();
+    if (y <= 0){
+        yspeed = yspeed * (-1);
+    }
+    
 }
 
 function display() {
     fill(255);
     text("Score: "+score, width-80, 30);
+    text("missed: "+miss, width-80, 50);
     
     //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
     if(tid > 0) {
         tid -= 1;
     }
+    
     if (tid < 100) {
         fill(col);
-        ellipse(x, y, rad*2, rad*2);
+        appelsin.tegn();
     }
 
     // Her vises turbanen - foreløbig blot en firkant
@@ -62,6 +75,7 @@ function move() {
         yspeed += grav;
     }
     if (x > width || y > height) {
+        miss +=1;
         shootNew();
     }
 }
@@ -71,18 +85,19 @@ function checkScore() {
     if (yspeed > 0) {
         if (turban.grebet(x, y, rad)) {
             score += 1;
-            shootNew(); 
+            shootNew();
         }
     }
 }
-    
+
 function shootNew() {
     //Her skal vi sørge for at en ny appelsin skydes afsted 
     x = rad;
-    y = 550;
+    y = Math.random()*750+30;
     yspeed = newspeed;
     xspeed = 6*Math.random();
     tid = (int) (Math.random() * 400);
+    console.log(tid);
 }
 
 function keyPressed() {
@@ -90,8 +105,14 @@ function keyPressed() {
 }
 
 function mousePressed(){
-
+    
 }
+
+
+//tid bruges til at definere hvorvidt appelsinen skal vises eller ej, baseret på tiden der går.
+//desuden bruges det til at sende en ny appelsin afsted
+
+//grav bruges til at sørge for at appelsinen falder ned.
 
 /*
 OPGAVER
