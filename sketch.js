@@ -25,7 +25,7 @@ var score = 0;
 var miss = 0;
 
 /* 
- * 
+
  */
 
 function setup() {
@@ -33,7 +33,7 @@ function setup() {
     newspeed = yspeed;
     x = rad;
     turban = new Kurv(670, 120, 70, 50, 10);
-    appelsin = new appelsin(x, y);
+
     
 }
 
@@ -60,7 +60,7 @@ function display() {
     
     if (tid < 100) {
         fill(col);
-        appelsin.tegn();
+        ellipse(x, y, rad * 2, rad * 2);
     }
 
     // Her vises turbanen - foreløbig blot en firkant
