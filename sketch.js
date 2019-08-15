@@ -36,14 +36,14 @@ function setup() {
     newspeed = yspeed;
     x = rad;
     turban = new Kurv(670, 120, 70, 50, 10);
-
+    appelsin = new appelsin(appelsin.x, appelsin.y, appelsin.rad*2, this.rad*2);
     
 }
 
 function draw() {
     background(0);
-    appelsin.move();
     checkScore();
+    appelsin.move();
     display();
     if (y <= 0){
         yspeed = yspeed * (-1);
@@ -57,14 +57,13 @@ function display() {
     text("missed: "+miss, width-80, 50);
     
     //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
-    appelsin.display();
     // Her vises turbanen - foreløbig blot en firkant
     turban.tegn();
 }
     
 function move() {
     //Her skal vi sørge for at appelsinen bevæger sig, hvis den er startet
-
+    appelsin.move();
 }
 
 function checkScore() {
@@ -77,14 +76,8 @@ function checkScore() {
     }
 }
 
-function shootNew() {
-    //Her skal vi sørge for at en ny appelsin skydes afsted 
-    x = rad;
-    y = Math.random()*750+30;
-    yspeed = newspeed;
-    xspeed = 6*Math.random();
-    tid = (int) (Math.random() * 400);
-    console.log(tid);
+function shootnew(){
+    appelsin.shootNew();
 }
 
 
