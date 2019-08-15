@@ -16,6 +16,9 @@ var newspeed;
 var grav = 0.1;
 var col = [200,100,0];
 
+//appelsin
+var appelsin;
+
 // Turbanen
 var turban;
 
@@ -39,7 +42,7 @@ function setup() {
 
 function draw() {
     background(0);
-    move();
+    appelsin.move();
     checkScore();
     display();
     if (y <= 0){
@@ -54,30 +57,14 @@ function display() {
     text("missed: "+miss, width-80, 50);
     
     //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
-    if(tid > 0) {
-        tid -= 1;
-    }
-    
-    if (tid < 100) {
-        fill(col);
-        ellipse(x, y, rad * 2, rad * 2);
-    }
-
+    appelsin.display();
     // Her vises turbanen - foreløbig blot en firkant
     turban.tegn();
 }
     
 function move() {
     //Her skal vi sørge for at appelsinen bevæger sig, hvis den er startet
-    if (tid <= 0) {
-        x += xspeed;
-        y += yspeed;
-        yspeed += grav;
-    }
-    if (x > width || y > height) {
-        miss +=1;
-        shootNew();
-    }
+
 }
 
 function checkScore() {
@@ -100,12 +87,10 @@ function shootNew() {
     console.log(tid);
 }
 
-function keyPressed() {
-    turban.move(key);
-}
 
-function mousePressed(){
-    
+
+function mouseMoved(){
+    turban.move(key);
 }
 
 
